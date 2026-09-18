@@ -1,6 +1,9 @@
 #!/bin/sh
 # Maakt van NLW_KERN een volledige DNS-naam en meldt wat deze pod aan Services ziet.
 #
+# Een .envsh wordt door de nginx-entrypoint ge-sourcet, zodat de aangepaste NLW_KERN de
+# envsubst-stap daarna bereikt; een .sh wordt alleen uitgevoerd en zijn export gaat verloren.
+#
 # De resolver van nginx gebruikt de zoekdomeinen uit resolv.conf niet, dus `nlw-nlw` vindt hij
 # niet terwijl `nlw-nlw.<namespace>.svc.cluster.local` wel werkt. Staat er geen punt in de
 # hostnaam van NLW_KERN, dan komt het eerste zoekdomein erachter. Het script draait vóór

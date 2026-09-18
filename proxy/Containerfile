@@ -10,7 +10,8 @@ ENV NLW_KERN=nlw-nlw:8080 \
 	NGINX_ENVSUBST_FILTER='^(NLW_|NGINX_LOCAL_RESOLVERS)'
 
 COPY default.conf.template /etc/nginx/templates/default.conf.template
-COPY 05-nlw-diagnose.sh /docker-entrypoint.d/05-nlw-diagnose.sh
+COPY 05-nlw-kern.envsh /docker-entrypoint.d/05-nlw-kern.envsh
+# De entrypoint sourcet een .envsh alleen als hij uitvoerbaar is.
 USER root
-RUN chmod +x /docker-entrypoint.d/05-nlw-diagnose.sh
+RUN chmod +x /docker-entrypoint.d/05-nlw-kern.envsh
 USER nginx
