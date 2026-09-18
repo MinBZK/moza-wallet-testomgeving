@@ -23,6 +23,15 @@ if ! getent passwd "$(id -u)" > /dev/null; then
 	echo "wallet:x:$(id -u):0:NL Wallet:${HOME}:/bin/bash" >> /etc/passwd
 fi
 
+# De publieke adressen zitten in sleutels, certificaten en de getekende wallet-config op het
+# volume. Veranderen ze (ander domein, nieuw subdomein goedgekeurd), dan is dit een andere
+# omgeving: alles op het volume weg en opnieuw inrichten. ZAD's --recreate-storage doet dat
+# ook, maar faalde op het platform ("NoneType + int"), en dit werkt ook zonder ZAD.
+if [[ -f "${NLW_DATA}/ingericht" && "$(sed -n 2p "${NLW_DATA}/ingericht")" != "${NLW_URL_PID}" ]]; then
+	echo "Volume is ingericht voor $(sed -n 2p "${NLW_DATA}/ingericht"), nu geldt ${NLW_URL_PID}: opnieuw beginnen"
+	find "${NLW_DATA}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+fi
+
 mkdir -p "${HOME}" "${NLW_DATA}/devenv-target" "${NLW_DATA}/wallet-core-target" "${NLW_DATA}/rdo-max-secrets"
 
 koppel() {
@@ -44,7 +53,8 @@ if [[ ! -f "${NLW_DATA}/ingericht" ]]; then
 	/opt/nlw/sbin/inrichten
 	find /opt/nl-wallet /opt/nl-rdo-max -newer /tmp/voor-inrichting \( -type f -o -type l \) -print0 \
 		| tar --null -cpf "${NLW_DATA}/gegenereerd.tar" -T -
-	date -u +%FT%TZ > "${NLW_DATA}/ingericht"
+	# Regel 1: wanneer; regel 2: voor welke adressen (zie de controle hierboven).
+	printf '%s\n%s\n' "$(date -u +%FT%TZ)" "${NLW_URL_PID}" > "${NLW_DATA}/ingericht"
 fi
 
 pgbin="$(echo /usr/lib/postgresql/*/bin)"
