@@ -84,7 +84,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Kern-image bouwen
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Containerfile
@@ -97,7 +97,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=nl-wallet
 
       - name: Proxy-image bouwen
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: proxy
           file: proxy/Containerfile
