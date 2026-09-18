@@ -46,6 +46,24 @@ if [[ -f "${NLW_DATA}/gegenereerd.tar" ]]; then
 	tar -xpf "${NLW_DATA}/gegenereerd.tar" -C /
 fi
 
+# Welke browser-origins de verification_server toelaat (CORS): de knop van wallet_web vraagt de
+# sessiestatus rechtstreeks bij de publieke verifier op. De inrichting zet alleen MOZA_ORIGIN;
+# een PR-preview van MOZa heeft een andere hostnaam. Dit staat los van de sleutels op het volume,
+# dus het mag bij elke start opnieuw, uit NLW_ALLOW_ORIGINS (JSON-lijst of "*", standaard "*").
+vs_toml=/opt/nl-wallet/wallet_core/wallet_server/verification_server/verification_server.toml
+if [[ -f "${vs_toml}" ]]; then
+	python3 - "${vs_toml}" "${NLW_ALLOW_ORIGINS:-*}" <<'PY'
+import re, sys
+pad, origins = sys.argv[1:3]
+waarde = '"*"' if origins.strip() == "*" else origins
+tekst = open(pad, encoding="utf-8").read()
+tekst, n = re.subn(r"^allow_origins = .*$", "allow_origins = " + waarde, tekst, count=1, flags=re.M)
+if n:
+    open(pad, "w", encoding="utf-8").write(tekst)
+print("allow_origins =", waarde if n else "(niet gevonden)")
+PY
+fi
+
 if [[ ! -f "${NLW_DATA}/ingericht" ]]; then
 	echo "Eerste start op dit volume: omgeving inrichten"
 	touch /tmp/voor-inrichting

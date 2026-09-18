@@ -22,7 +22,7 @@ Het subdomein `moza-wallet.rijksapp.dev` moet ZAD-beheer goedkeuren. Tot die tij
 
 ZAD geeft elk component één hostnaam. De `nlw-*`-componenten zijn daarom kleine nginx-proxy's (`proxy/`) die met de oorspronkelijke Host-header doorsturen naar de kerncontainer (`NLW_KERN`, op ZAD `nlw-nlw:8080`: een Service heet daar `<deployment>-<component>`). De nginx in de kerncontainer kiest op die hostnaam de service (`rootfs/opt/nlw/nginx.conf`).
 
-Binnen het project (bijvoorbeeld vanuit MOZa) geeft `http://nlw-nlw:8080` de interne API van de verification_server, en `http://nlw-nlw:8080/moza.json` de links voor "bevoegdheid toevoegen".
+Binnen het cluster geeft `http://nlw-nlw.rig-prd-mwt-ked.svc.cluster.local:8080` de interne API van de verification_server, en `/moza.json` daarop de links voor "bevoegdheid toevoegen". MOZa (ZAD-project `pm-5sj`, component `nlw-api`) gebruikt die; pods van verschillende projecten mogen elkaar alleen bereiken met ZAD's `cross-domain-access`. Een inbound-regel telt pas als de deployment van de tegenpartij is ingevuld, dus per MOZa-deployment die erbij mag staat er een regel in dit project (`moza-poc` voor proef, `moza-pr<N>` voor een PR-preview): `zad service config set cross-domain-access --target project --set 'inbound[<i>].name=moza-pr<N>' --set 'inbound[<i>].from.project=pm-5sj' --set 'inbound[<i>].from.deployment=pr<N>' --set 'inbound[<i>].from.component=nlw-api' --set 'inbound[<i>].to.component=nlw' --set 'inbound[<i>].to.port=8080'` (de hele lijst opnieuw opgeven; `service config set` vervangt hem). De verification_server laat als browser-origin standaard alles toe (`NLW_ALLOW_ORIGINS`, zie `start`), zodat ook een preview de sessiestatus mag opvragen.
 
 ## Bouwen
 
