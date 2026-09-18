@@ -28,7 +28,7 @@ jobs:
       proxy: ${{ steps.namen.outputs.proxy }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Versies en imagenamen
         id: namen
@@ -47,7 +47,7 @@ jobs:
           df -h /
 
       - name: Checkout NL Wallet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: MinBZK/nl-wallet
           ref: ${{ env.NL_WALLET_REF }}
