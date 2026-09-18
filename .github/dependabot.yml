@@ -1,0 +1,16 @@
+# Dependabot houdt de GitHub Actions en de basis-images van de Containerfiles bij.
+# Wekelijks: de omgeving is een testopstelling, een dagelijkse ronde geeft alleen ruis.
+# De NL Wallet-commit zelf staat in versies.env en wordt bewust met de hand bijgewerkt,
+# omdat de app op het toestel mee moet.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directories:
+      - "/"
+      - "/proxy"
+    schedule:
+      interval: "weekly"

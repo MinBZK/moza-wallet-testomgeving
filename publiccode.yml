@@ -1,0 +1,80 @@
+publiccodeYmlVersion: "0.5"
+name: MOZa wallet testomgeving
+url: https://github.com/MinBZK/moza-wallet-testomgeving
+landingURL: https://mijnoverheidzakelijk.nl
+platforms:
+  - web
+  - android
+categories:
+  - digital-citizenship
+  - identity-management
+organisation:
+  uri: https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties
+  name: Ministerie van Binnenlandse Zaken en Koninkrijksrelaties
+fundedBy:
+  - name: Ministerie van Binnenlandse Zaken en Koninkrijksrelaties
+    uri: https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties
+developmentStatus: development
+softwareType: standalone/web
+intendedAudience:
+  countries:
+    - NL
+  scope:
+    - government
+description:
+  nl:
+    localisedName: MOZa wallet testomgeving
+    shortDescription: >-
+      Dummy wallet gebaseerd op NL Wallet, als testomgeving voor inloggen op
+      MijnOverheid Zakelijk (MOZa).
+    longDescription: >
+      Deze testomgeving zet de lokale ontwikkelomgeving van NL Wallet online
+      op het ZAD-platform, zodat een zelfgebouwde NL Wallet-app kan onboarden,
+      een PID kan ophalen via een mock-DigiD, een fictieve KVK-bevoegdheid kan
+      krijgen en kan inloggen op MijnOverheid Zakelijk. Alles werkt met
+      fictieve testpersonen en testsleutels.
+
+
+      Deze repository bevat de containers, de configuratie en de workflow
+      voor die omgeving. Het MOZa-project bestaat uit meerdere repositories
+      binnen de MinBZK organisatie, te herkennen aan de moza- prefix of
+      het topic mijnoverheidzakelijk.
+    features:
+      - NL Wallet-services (wallet_provider, pid_issuer, issuance_server, verification_server) in één container
+      - Mock-DigiD en mock-BRP met fictieve testpersonen
+      - KVK-bevoegdheid als attestatie van een fictieve uitgever
+      - Publieke https-adressen per dienst via ZAD
+  en:
+    shortDescription: >-
+      Dummy wallet based on NL Wallet, as a test environment for logging in to
+      "MijnOverheid Zakelijk" (MOZa).
+    longDescription: >
+      This test environment runs the local development environment of NL
+      Wallet on the ZAD platform, so that a self-built NL Wallet app can
+      onboard, obtain a PID through a mock DigiD, receive a fictitious
+      chamber-of-commerce authorisation and log in to "MijnOverheid
+      Zakelijk". Everything uses fictitious test persons and test keys.
+
+
+      This repository contains the containers, configuration and workflow
+      for that environment. The MOZa project consists of multiple
+      repositories within the MinBZK organisation, identifiable by the
+      moza- prefix or the mijnoverheidzakelijk topic.
+    features:
+      - NL Wallet services (wallet_provider, pid_issuer, issuance_server, verification_server) in one container
+      - Mock DigiD and mock BRP with fictitious test persons
+      - Chamber-of-commerce authorisation as an attestation from a fictitious issuer
+      - Public https addresses per service through ZAD
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Ministerie van Binnenlandse Zaken en Koninkrijksrelaties
+maintenance:
+  type: internal
+  contacts:
+    - name: MijnOverheid Zakelijk Team
+      email: moza@minbzk.nl
+      affiliation: Ministerie van Binnenlandse Zaken en Koninkrijksrelaties
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - nl

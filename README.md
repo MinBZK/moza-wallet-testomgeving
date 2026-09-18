@@ -1,4 +1,4 @@
-# NL Wallet-testomgeving
+# MOZa wallet testomgeving
 
 Een online NL Wallet-omgeving waartegen een zelfgebouwde NL Wallet-app (Android) kan onboarden, een PID kan ophalen via de mock-DigiD, een KVK-bevoegdheid kan krijgen en kan inloggen bij MOZa. Het is de lokale ontwikkelomgeving van [MinBZK/nl-wallet](https://github.com/MinBZK/nl-wallet) (`scripts/setup-devenv.sh` en `scripts/start-devenv.sh`), in een container op ZAD. De MOZa-kant (inlogkaart, node-server, lokale inrichting) staat in [MinBZK/moza-poc](https://github.com/MinBZK/moza-poc), branch `feat/nl-wallet-inloggen`.
 
@@ -42,3 +42,23 @@ Op een leeg volume draait `rootfs/opt/nlw/sbin/inrichten` één keer:
 Sleutels, HSM-token, database en configuratie horen bij elkaar. Een nieuw volume betekent een nieuwe omgeving: wallets die tegen de oude omgeving geregistreerd zijn, werken dan niet meer. Migraties draaien bij elke start met `up`, nooit met `fresh`.
 
 `moza/inrichten.sh` is afgeleid van `server/nl-wallet/lokaal-inrichten.sh` in MinBZK/moza-poc (branch `feat/nl-wallet-inloggen`). Pas wijzigingen in testpersonen of attestaties op beide plekken toe.
+
+## Bijdragen
+
+De ontwikkeling staat in deze fase bewust open: wijzigingen mogen direct op `main`, zonder verplichte review of statuschecks, zodat aanpassen laagdrempelig blijft. Elke push naar `main` bouwt de images en rolt ze uit naar ZAD (zie Bouwen). Een pull request bouwt alleen. Zodra de omgeving door meer mensen wordt gebruikt, komen branchbescherming en review erbij, zoals in [moza-poc-fbs-berichtenbox](https://github.com/MinBZK/moza-poc-fbs-berichtenbox).
+
+## Licentie
+
+Dit project is gelicenseerd onder de [EUPL-1.2](LICENSE). De NL Wallet-broncode die in de images wordt meegebouwd heeft haar eigen licentie, zie [MinBZK/nl-wallet](https://github.com/MinBZK/nl-wallet).
+
+## AI-verantwoording
+
+De code in deze repo is grotendeels gegenereerd met generatieve AI (Claude Code) en door een ontwikkelaar beproefd door de omgeving lokaal en op ZAD te draaien en met de testapp te gebruiken. Zie [DISCLAIMER.md](DISCLAIMER.md) en [docs/ai-verantwoording.md](docs/ai-verantwoording.md).
+
+## Ondersteuning
+
+Zie [SUPPORT.md](SUPPORT.md).
+
+## Governance
+
+Zie [GOVERNANCE.md](GOVERNANCE.md).
