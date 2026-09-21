@@ -7,6 +7,12 @@ on:
   push:
     branches:
       - main
+    # Alleen documentatie gewijzigd: niet opnieuw bouwen en uitrollen (een uitrol herstart de kern).
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "publiccode.yml"
+      - "LICENSE"
   pull_request:
   workflow_dispatch:
 
