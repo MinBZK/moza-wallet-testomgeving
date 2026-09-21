@@ -14,4 +14,7 @@ until [[ -f /tmp/migraties-klaar ]]; do
 done
 
 cd "/opt/nl-wallet/wallet_core/$2"
-exec "/opt/nlw/bin/$1"
+# Alle services loggen naar dezelfde stdout (zad logs). De naam ervoor maakt zichtbaar welk proces
+# iets meldt; zonder was een HSM-fout ("ERROR r2d2 ...") niet aan een service toe te wijzen. Via
+# procesvervanging, zodat exec het proces-id houdt en supervisord de service zelf kan stoppen.
+exec "/opt/nlw/bin/$1" > >(sed -u "s/^/[$1] /") 2>&1

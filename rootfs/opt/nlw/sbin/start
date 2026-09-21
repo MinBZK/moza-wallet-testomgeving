@@ -46,6 +46,41 @@ if [[ -f "${NLW_DATA}/gegenereerd.tar" ]]; then
 	tar -xpf "${NLW_DATA}/gegenereerd.tar" -C /
 fi
 
+if [[ ! -f "${NLW_DATA}/ingericht" ]]; then
+	echo "Eerste start op dit volume: omgeving inrichten"
+	touch /tmp/voor-inrichting
+	sleep 1
+	/opt/nlw/sbin/inrichten
+	find /opt/nl-wallet /opt/nl-rdo-max -newer /tmp/voor-inrichting \( -type f -o -type l \) -print0 \
+		| tar --null -cpf "${NLW_DATA}/gegenereerd.tar" -T -
+	# Regel 1: wanneer; regel 2: voor welke adressen (zie de controle hierboven).
+	printf '%s\n%s\n' "$(date -u +%FT%TZ)" "${NLW_URL_PID}" > "${NLW_DATA}/ingericht"
+fi
+
+# Aanpassingen die bij elke start opnieuw gelden. Ze staan na de inrichting, zodat ze ook op een
+# vers volume meteen werken (de configuratiebestanden bestaan dan pas).
+
+# De issuance_server en de verification_server gebruiken hier alleen software-sleutels, maar de
+# devenv-templates geven ze toch een [hsm]-sectie. NL Wallet sluit de PKCS#11-bibliotheek dan vlak
+# na het opstarten af (niemand houdt de HSM-dienst vast), terwijl de health checker de sessiepool
+# wel bewaart: die probeert daarna eindeloos sessies te openen ("ERROR r2d2 ... Cryptoki library
+# has not yet been initialized", drie per kwartierminuut). Dat is ruis, maar het drukt binnen een
+# uur alle echte regels uit het log van ZAD. Zonder [hsm]-sectie maken ze geen pool aan.
+for toml in wallet_server/issuance_server/issuance_server.toml wallet_server/verification_server/verification_server.toml; do
+	pad="/opt/nl-wallet/wallet_core/${toml}"
+	if [[ -f "${pad}" ]] && ! grep -q 'private_key_type = "hsm"' "${pad}"; then
+		python3 - "${pad}" <<'PY'
+import re, sys
+pad = sys.argv[1]
+tekst = open(pad, encoding="utf-8").read()
+nieuw, n = re.subn(r"(?ms)^\[hsm\]\n.*?(?=^\[|\Z)", "", tekst, count=1)
+if n:
+    open(pad, "w", encoding="utf-8").write(nieuw)
+print(("[hsm] verwijderd uit " if n else "geen [hsm] in ") + pad)
+PY
+	fi
+done
+
 # Welke browser-origins de verification_server toelaat (CORS): de knop van wallet_web vraagt de
 # sessiestatus rechtstreeks bij de publieke verifier op. De inrichting zet alleen MOZA_ORIGIN;
 # een PR-preview van MOZa heeft een andere hostnaam. Dit staat los van de sleutels op het volume,
@@ -62,17 +97,6 @@ if n:
     open(pad, "w", encoding="utf-8").write(tekst)
 print("allow_origins =", waarde if n else "(niet gevonden)")
 PY
-fi
-
-if [[ ! -f "${NLW_DATA}/ingericht" ]]; then
-	echo "Eerste start op dit volume: omgeving inrichten"
-	touch /tmp/voor-inrichting
-	sleep 1
-	/opt/nlw/sbin/inrichten
-	find /opt/nl-wallet /opt/nl-rdo-max -newer /tmp/voor-inrichting \( -type f -o -type l \) -print0 \
-		| tar --null -cpf "${NLW_DATA}/gegenereerd.tar" -T -
-	# Regel 1: wanneer; regel 2: voor welke adressen (zie de controle hierboven).
-	printf '%s\n%s\n' "$(date -u +%FT%TZ)" "${NLW_URL_PID}" > "${NLW_DATA}/ingericht"
 fi
 
 pgbin="$(echo /usr/lib/postgresql/*/bin)"
