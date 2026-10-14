@@ -41,7 +41,7 @@ Op een leeg volume draait `rootfs/opt/nlw/sbin/inrichten` één keer:
 
 Sleutels, HSM-token, database en configuratie horen bij elkaar. Een nieuw volume betekent een nieuwe omgeving: wallets die tegen de oude omgeving geregistreerd zijn, werken dan niet meer. Migraties draaien bij elke start met `up`, nooit met `fresh`.
 
-`moza/inrichten.sh` is afgeleid van `server/nl-wallet/lokaal-inrichten.sh` in MinBZK/moza-poc (branch `feat/nl-wallet-inloggen`). Pas wijzigingen in testpersonen of attestaties op beide plekken toe.
+`moza/inrichten.sh` is afgeleid van `server/nl-wallet/lokaal-inrichten.sh` in MinBZK/moza-poc (branch `feat/nl-wallet-inloggen`). Pas wijzigingen in testpersonen of attestaties op beide plekken toe. De testpersonen (`moza/testpersonen.sh`) zet `start` bij elke start opnieuw, dus een gewijzigde naam geldt na een uitrol zonder nieuw volume; een wallet die de PID al had, moet die opnieuw ophalen (app resetten en opnieuw onboarden).
 
 ## Bijdragen
 

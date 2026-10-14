@@ -60,6 +60,11 @@ fi
 # Aanpassingen die bij elke start opnieuw gelden. Ze staan na de inrichting, zodat ze ook op een
 # vers volume meteen werken (de configuratiebestanden bestaan dan pas).
 
+# De testpersonen (mock-BRP en mock-DigiD-pagina) komen uit het image. Opnieuw zetten, zodat een
+# gewijzigde testpersoon na een uitrol geldt zonder nieuw volume. Een PID die een wallet al had,
+# verandert daardoor niet: die wallet moet de PID opnieuw ophalen.
+PATH="/opt/nlw/shims:${PATH}" bash /opt/nlw/moza/testpersonen.sh || echo "Testpersonen zetten mislukt; de vorige blijven gelden"
+
 # De issuance_server en de verification_server gebruiken hier alleen software-sleutels, maar de
 # devenv-templates geven ze toch een [hsm]-sectie. NL Wallet sluit de PKCS#11-bibliotheek dan vlak
 # na het opstarten af (niemand houdt de HSM-dienst vast), terwijl de health checker de sessiepool
