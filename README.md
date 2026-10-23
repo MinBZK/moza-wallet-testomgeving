@@ -37,11 +37,11 @@ Op een leeg volume draait `rootfs/opt/nlw/sbin/inrichten` één keer:
 1. `publiek-maken.py` zet de devenv-templates om van `localhost` naar de publieke https-adressen, en de TLS-pinning in de wallet-config naar de Let's Encrypt-roots;
 2. `scripts/setup-devenv.sh` van NL Wallet maakt CA's, certificaten, HSM-sleutels en configuratie. `cargo run` gaat via een shim naar de binaries in het image;
 3. de mock-DigiD krijgt zijn sleutels en configuratie;
-4. `moza/inrichten.sh` voegt de MOZa-verifier (usecase `moza_inloggen`), de testpersonen uit `moza/testpersonen/` en de KVK-bevoegdheid (`moza/attestaties/`) toe.
+4. `moza/inrichten.sh` voegt de MOZa-verifier (usecase `moza_inloggen`), de testpersonen uit `moza/testpersonen/` en de KVK-bevoegdheid (`moza/bevoegdheden.sh` met `moza/attestaties/`) toe.
 
 Sleutels, HSM-token, database en configuratie horen bij elkaar. Een nieuw volume betekent een nieuwe omgeving: wallets die tegen de oude omgeving geregistreerd zijn, werken dan niet meer. Migraties draaien bij elke start met `up`, nooit met `fresh`.
 
-`moza/inrichten.sh` is afgeleid van `server/nl-wallet/lokaal-inrichten.sh` in MinBZK/moza-poc (branch `feat/nl-wallet-inloggen`). Pas wijzigingen in testpersonen of attestaties op beide plekken toe. De testpersonen (`moza/testpersonen.sh`) zet `start` bij elke start opnieuw, dus een gewijzigde naam geldt na een uitrol zonder nieuw volume; een wallet die de PID al had, moet die opnieuw ophalen (app resetten en opnieuw onboarden).
+`moza/inrichten.sh` is afgeleid van `server/nl-wallet/lokaal-inrichten.sh` in MinBZK/moza-poc (branch `feat/nl-wallet-inloggen`). Pas wijzigingen in testpersonen of attestaties op beide plekken toe. De testpersonen (`moza/testpersonen.sh`) zet `start` bij elke start opnieuw, dus een gewijzigde naam geldt na een uitrol zonder nieuw volume; een wallet die de PID al had, moet die opnieuw ophalen (app resetten en opnieuw onboarden). Hetzelfde geldt voor de bevoegdheden (`moza/bevoegdheden.sh`): een nieuwe houder of onderneming in `moza/attestaties/bevoegdheden.json` werkt na een uitrol. Een houder is een BSN, of een object met `bsn` en eventueel een eigen `functie` en `bevoegdheid` (zoals Bilal Yılmaz, gemachtigd medewerker van Noon en Blend).
 
 ## Bijdragen
 

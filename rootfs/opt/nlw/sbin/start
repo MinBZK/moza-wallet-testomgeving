@@ -65,6 +65,10 @@ fi
 # verandert daardoor niet: die wallet moet de PID opnieuw ophalen.
 PATH="/opt/nlw/shims:${PATH}" bash /opt/nlw/moza/testpersonen.sh || echo "Testpersonen zetten mislukt; de vorige blijven gelden"
 
+# Hetzelfde voor de KVK-bevoegdheden: een nieuwe houder of onderneming geldt na een uitrol, zonder
+# nieuw volume. De certificaten van KVK Demo blijven staan, dus de links houden dezelfde client_id.
+PATH="/opt/nlw/shims:${PATH}" bash /opt/nlw/moza/bevoegdheden.sh || echo "Bevoegdheden zetten mislukt; de vorige blijven gelden"
+
 # De issuance_server en de verification_server gebruiken hier alleen software-sleutels, maar de
 # devenv-templates geven ze toch een [hsm]-sectie. NL Wallet sluit de PKCS#11-bibliotheek dan vlak
 # na het opstarten af (niemand houdt de HSM-dienst vast), terwijl de health checker de sessiepool

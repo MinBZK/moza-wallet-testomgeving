@@ -2,7 +2,14 @@
   "ondernemingen": [
     {
       "id": "noon",
-      "houders": ["999992004"],
+      "houders": [
+        "999992004",
+        {
+          "bsn": "999993008",
+          "functie": "Administratief medewerker (gemachtigd)",
+          "bevoegdheid": "Beperkt bevoegd"
+        }
+      ],
       "kvk_nummer": "85234567",
       "handelsnaam": "Koffiezaak Noon",
       "rechtsvorm": "Eenmanszaak",
@@ -11,7 +18,14 @@
     },
     {
       "id": "blend",
-      "houders": ["999992004"],
+      "houders": [
+        "999992004",
+        {
+          "bsn": "999993008",
+          "functie": "Administratief medewerker (gemachtigd)",
+          "bevoegdheid": "Beperkt bevoegd"
+        }
+      ],
       "kvk_nummer": "91827364",
       "handelsnaam": "Koffiebranderij Blend",
       "rechtsvorm": "Besloten vennootschap",
